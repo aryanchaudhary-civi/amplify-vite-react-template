@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import './App.css';
 
+interface Provider {
+  id: string;
+  name: string;
+}
+
 interface Note {
   date: string;
   noteType: string;
@@ -16,7 +21,7 @@ const practices = [
   // Add more practices as needed
 ];
 
-const providers = {
+const providers: { [key: string]: Provider[] } = {
   '1': [
     { id: '1', name: 'Provider A' },
     { id: '2', name: 'Provider B' },
@@ -89,7 +94,7 @@ function App() {
             Select Provider:
             <select value={selectedProvider} onChange={handleProviderChange}>
               <option value="">--Select Provider--</option>
-              {providers[selectedPractice]?.map(provider => (
+              {providers[selectedPractice]?.map((provider: Provider) => (
                 <option key={provider.id} value={provider.id}>
                   {provider.name}
                 </option>
