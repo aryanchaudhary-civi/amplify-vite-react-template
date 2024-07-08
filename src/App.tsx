@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Container, Grid, Paper, MenuItem, Select, FormControl, InputLabel, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Drawer, List, ListItem, ListItemText, CssBaseline, Box } from '@mui/material';
 import './App.css';
 
 interface Provider {
@@ -53,20 +52,18 @@ const dummyNotes: Note[] = [
   },
 ];
 
-const drawerWidth = 240;
-
 function App() {
   const [selectedPractice, setSelectedPractice] = useState<string>('');
   const [selectedProvider, setSelectedProvider] = useState<string>('');
   const [notes, setNotes] = useState<Note[]>([]);
 
-  const handlePracticeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedPractice(event.target.value as string);
+  const handlePracticeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedPractice(event.target.value);
     setSelectedProvider('');
   };
 
-  const handleProviderChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedProvider(event.target.value as string);
+  const handleProviderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedProvider(event.target.value);
   };
 
   const fetchNotes = () => {
@@ -76,142 +73,79 @@ function App() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            ScribePT QA Reporting Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-        }}
-      >
-        <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
-            <ListItem button key="Dashboard">
-              <ListItemText primary="Reporting Dashboard" />
-            </ListItem>
-            <ListItem button key="Account">
-              <ListItemText primary="Account Details" />
-            </ListItem>
-          </List>
-          <Box sx={{ p: 2 }}>
-            <Typography variant="subtitle1">Aryan Chaudhary</Typography>
-            <Typography variant="body2">Developer</Typography>
-          </Box>
-        </Box>
-      </Drawer>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3, ml: drawerWidth }}
-      >
-        <Toolbar />
-        <Container>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography variant="h4" component="h1" gutterBottom>
-                ScribePT QA Reporting Dashboard
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel>Select Practice</InputLabel>
-                <Select
-                  value={selectedPractice}
-                  onChange={handlePracticeChange}
-                  label="Select Practice"
-                >
-                  <MenuItem value="">
-                    <em>--Select Practice--</em>
-                  </MenuItem>
-                  {practices.map(practice => (
-                    <MenuItem key={practice.id} value={practice.id}>
-                      {practice.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            {selectedPractice && (
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel>Select Provider</InputLabel>
-                  <Select
-                    value={selectedProvider}
-                    onChange={handleProviderChange}
-                    label="Select Provider"
-                  >
-                    <MenuItem value="">
-                      <em>--Select Provider--</em>
-                    </MenuItem>
-                    {providers[selectedPractice]?.map(provider => (
-                      <MenuItem key={provider.id} value={provider.id}>
-                        {provider.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            )}
-            {selectedProvider && (
-              <Grid item xs={12}>
-                <Button variant="contained" color="primary" onClick={fetchNotes}>
-                  Fetch Notes
-                </Button>
-              </Grid>
-            )}
-            {notes.length > 0 && (
-              <Grid item xs={12}>
-                <Paper>
-                  <TableContainer>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Date</TableCell>
-                          <TableCell>Note Type</TableCell>
-                          <TableCell>Audio Link</TableCell>
-                          <TableCell>Transcript Link</TableCell>
-                          <TableCell>Comments Link</TableCell>
-                          <TableCell>SOAP Note Link</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {notes.map((note, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{note.date}</TableCell>
-                            <TableCell>{note.noteType}</TableCell>
-                            <TableCell>
-                              <a href={note.audioLink}>Audio</a>
-                            </TableCell>
-                            <TableCell>
-                              <a href={note.transcriptLink}>Transcript</a>
-                            </TableCell>
-                            <TableCell>
-                              <a href={note.commentsLink}>Comments</a>
-                            </TableCell>
-                            <TableCell>
-                              <a href={note.soapNoteLink}>SOAP Note</a>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Paper>
-              </Grid>
-            )}
-          </Grid>
-        </Container>
-      </Box>
-    </Box>
+    <div className="app-container">
+      <div className="sidebar">
+        <h2>ScribePT</h2>
+        <ul>
+          <li className="active">Reporting Dashboard</li>
+          <li>Account Details</li>
+        </ul>
+        <div className="user-info">
+          <p>Aryan Chaudhary</p>
+          <p>Developer</p>
+        </div>
+      </div>
+      <div className="main-content">
+        <h1>ScribePT QA Reporting Dashboard</h1>
+        <div className="form-group">
+          <label>Select Practice:</label>
+          <select value={selectedPractice} onChange={handlePracticeChange}>
+            <option value="">--Select Practice--</option>
+            {practices.map(practice => (
+              <option key={practice.id} value={practice.id}>
+                {practice.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        {selectedPractice && (
+          <div className="form-group">
+            <label>Select Provider:</label>
+            <select value={selectedProvider} onChange={handleProviderChange}>
+              <option value="">--Select Provider--</option>
+              {providers[selectedPractice]?.map(provider => (
+                <option key={provider.id} value={provider.id}>
+                  {provider.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        {selectedProvider && (
+          <div className="form-group">
+            <button onClick={fetchNotes}>Fetch Notes</button>
+          </div>
+        )}
+        {notes.length > 0 && (
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Note Type</th>
+                  <th>Audio Link</th>
+                  <th>Transcript Link</th>
+                  <th>Comments Link</th>
+                  <th>SOAP Note Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                {notes.map((note, index) => (
+                  <tr key={index}>
+                    <td>{note.date}</td>
+                    <td>{note.noteType}</td>
+                    <td><a href={note.audioLink}>Audio</a></td>
+                    <td><a href={note.transcriptLink}>Transcript</a></td>
+                    <td><a href={note.commentsLink}>Comments</a></td>
+                    <td><a href={note.soapNoteLink}>SOAP Note</a></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
